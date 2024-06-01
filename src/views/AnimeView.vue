@@ -31,7 +31,26 @@
             </v-col>    
         </v-row>
         <br/>
-        <v-card>
+        <v-dialog
+        v-model="dialog"
+        width="auto"
+        >
+        <v-card
+            max-width="400"
+            prepend-icon="mdi-update"
+            text="Your application will relaunch automatically after the update is complete."
+            title="Update in progress"
+        >
+            <template v-slot:actions>
+            <v-btn
+                class="ms-auto"
+                text="Ok"
+                @click="dialog = false"
+            ></v-btn>
+            </template>
+        </v-card>
+        </v-dialog>
+        <v-card variant="outlined">
             <div class="ma-2" align="center" justify="center"><h2>Review</h2></div>
                     <v-row align="center" justify="center">
                         <v-col cols="10">
@@ -44,25 +63,31 @@
                             ></v-textarea>
                         </v-col>
                         <v-col cols="auto">
-                            <v-btn icon="mdi-plus" size="small"></v-btn>
+                            <v-btn 
+                            icon="mdi-plus" 
+                            size="small"
+                            @click="dialog = true"></v-btn>
                         </v-col>
                     </v-row>
                     <v-row align="center" justify="center">
                         <v-col cols="11">
+                            <div class="ma-2" 
+                            v-for="review in reviews.slice((page-1)*5, page*5)"
+                            :key="review">
+                                <v-card
+                                :title="review.id"
+                                :subtitle="review.time"
+                                >
+                                    <v-card-text class="bg-surface-light pt-4">{{review.content}}</v-card-text>
+                                </v-card>                            
+                            </div>
+                            <br/>
                             <div class="ma-2">
-                            <v-list lines="two">
-                                <v-list-item
-                                    v-for="n in reviews.slice((page-1)*5, page*5)"
-                                    :key="n"
-                                    :title="n.id"
-                                    :subtitle="n.content"
-                                ></v-list-item>
-                            </v-list>
-                            <v-pagination
-            v-model="page"
-            :length="lengthOfPage">
-            </v-pagination>
-                        </div>
+                                <v-pagination
+                                    v-model="page"
+                                    :length="lengthOfPage">
+                                </v-pagination>
+                            </div>
                         </v-col>
                     </v-row>
         </v-card>
@@ -81,6 +106,7 @@ export default defineComponent({
         const reviews = ref([])
         const page = ref(1)
         const lengthOfPage = ref(0)
+        const dialog = ref(false)
         onMounted(() => {
             id.value = route.path.split("/")[2]
             tags.value = ["성장", "우정", "스포츠"]
@@ -102,28 +128,28 @@ export default defineComponent({
             })
 
             reviews.value = [
-                {id: "id-01", content: "진짜 대박 재미나다"},
-                {id: "id-02", content: "진짜 대박 재미나다"},
-                {id: "id-03", content: "진짜 대박 재미나다"},
-                {id: "id-04", content: "진짜 대박 재미나다"},
-                {id: "id-05", content: "진짜 대박 재미나다"},
-                {id: "id-06", content: "진짜 대박 재미나다"},
-                {id: "id-07", content: "진짜 대박 재미나다"},
-                {id: "id-08", content: "진짜 대박 재미나다"},
-                {id: "id-09", content: "진짜 대박 재미나다"},
-                {id: "id-10", content: "진짜 대박 재미나다"},
-                {id: "id-11", content: "진짜 대박 재미나다"},
-                {id: "id-12", content: "진짜 대박 재미나다"},
-                {id: "id-13", content: "진짜 대박 재미나다"},
-                {id: "id-14", content: "진짜 대박 재미나다"},
-                {id: "id-15", content: "진짜 대박 재미나다"},
-                {id: "id-16", content: "진짜 대박 재미나다"},
-                {id: "id-17", content: "진짜 대박 재미나다"},
-                {id: "id-18", content: "진짜 대박 재미나다"},
-                {id: "id-19", content: "진짜 대박 재미나다"},
-                {id: "id-20", content: "진짜 대박 재미나다"},
-                {id: "id-21", content: "진짜 대박 재미나다"},
-                {id: "id-22", content: "진짜 대박 재미나다"},
+                {id: "id-01", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-02", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-03", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-04", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-05", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-06", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-07", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-08", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-09", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-10", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-11", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-12", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-13", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-14", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-15", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-16", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-17", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-18", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-19", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-20", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-21", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
+                {id: "id-22", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
             ],
             lengthOfPage.value = (reviews.value.length / 5) + 1
         })
@@ -134,7 +160,8 @@ export default defineComponent({
             infoView,
             reviews,
             page,
-            lengthOfPage
+            lengthOfPage,
+            dialog
         }
     },
 })
