@@ -5,9 +5,9 @@ async function getAnimes() {
     return value.message
 }
 
-async function requestPost(params) {
-    const value = await common.axiosCall("POST", "/api/v1/endpoint", params);
-    return value
+async function postAnime(params) {
+    const value = await common.axiosCall("POST", "/anime/get_info", params);
+    return value.message
 }
 
-export {getAnimes, requestPost}
+export {getAnimes, postAnime}
