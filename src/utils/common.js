@@ -7,12 +7,13 @@ const axiosService = axios.create({
 const axiosCall = async (method, url, params = {}, errorFunc=false) => {
     let axios = axiosService;
     let option = { withCredentials: true };
+    let returnValue = {}
     switch (method) {
         case "GET":
             await axios
             .get(url,option)
             .then((res) => {
-                return res
+                returnValue = res.data
             })
             .catch((err) => {
                 if (errorFunc) {
@@ -27,7 +28,7 @@ const axiosCall = async (method, url, params = {}, errorFunc=false) => {
             await axios
             .post(url,params,option)
             .then((res) => {
-                return res
+                returnValue = res.data
             })
             .catch((err) => {
                 if (errorFunc) {
@@ -36,8 +37,8 @@ const axiosCall = async (method, url, params = {}, errorFunc=false) => {
                     return err
                 }
             })
-
     }
+    return returnValue
 }
 
 const commonObj = {
