@@ -21,6 +21,7 @@
           v-model="password"
           :readonly="loading"
           :rules="[required]"
+          type="password"
           label="Password"
           placeholder="Enter your password"
           clearable

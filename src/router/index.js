@@ -1,10 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import test from "./test"
 import auth from "./auth"
+import anime from "./anime"
 
 const routes=[
     ...test,
-    ...auth
+    ...auth,
+    ...anime
 ]
 
 const router = createRouter({
