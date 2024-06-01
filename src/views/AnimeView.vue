@@ -8,7 +8,7 @@
                 </v-img>
             </v-col>
             <v-col cols="9">
-                <v-card>
+                <v-card variant="text">
                         <v-chip 
                         v-for="tag in animeInfo.tags"
                         :key="tag"
@@ -30,7 +30,42 @@
                 </v-card>
             </v-col>    
         </v-row>
-
+        <br/>
+        <v-card>
+            <div class="ma-2" align="center" justify="center"><h2>Review</h2></div>
+                    <v-row align="center" justify="center">
+                        <v-col cols="10">
+                            <v-textarea
+                            label="comment"
+                            row-height="20"
+                            rows="2"
+                            variant="filled"
+                            no-resize
+                            ></v-textarea>
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-btn icon="mdi-plus" size="small"></v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-row align="center" justify="center">
+                        <v-col cols="11">
+                            <div class="ma-2">
+                            <v-list lines="two">
+                                <v-list-item
+                                    v-for="n in reviews.slice((page-1)*5, page*5)"
+                                    :key="n"
+                                    :title="n.id"
+                                    :subtitle="n.content"
+                                ></v-list-item>
+                            </v-list>
+                            <v-pagination
+            v-model="page"
+            :length="lengthOfPage">
+            </v-pagination>
+                        </div>
+                        </v-col>
+                    </v-row>
+        </v-card>
     </v-container>
 </template>
 <script>
@@ -43,6 +78,9 @@ export default defineComponent({
         const tags = ref([])
         const animeInfo = ref({})
         const infoView = ref([])
+        const reviews = ref([])
+        const page = ref(1)
+        const lengthOfPage = ref(0)
         onMounted(() => {
             id.value = route.path.split("/")[2]
             tags.value = ["성장", "우정", "스포츠"]
@@ -59,18 +97,44 @@ export default defineComponent({
             Object.keys(animeInfo.value).forEach((k) => {
                 if (k !== "image" & k!== "tags" & k!=="name") {
                     let value = animeInfo.value[k].toString()
-                    if (k === "content") {
-                        value = value.replace(/\\n/gi,'<br/>');
-                    }
                     infoView.value.push({key: k, value: value})
                 }
             })
+
+            reviews.value = [
+                {id: "id-01", content: "진짜 대박 재미나다"},
+                {id: "id-02", content: "진짜 대박 재미나다"},
+                {id: "id-03", content: "진짜 대박 재미나다"},
+                {id: "id-04", content: "진짜 대박 재미나다"},
+                {id: "id-05", content: "진짜 대박 재미나다"},
+                {id: "id-06", content: "진짜 대박 재미나다"},
+                {id: "id-07", content: "진짜 대박 재미나다"},
+                {id: "id-08", content: "진짜 대박 재미나다"},
+                {id: "id-09", content: "진짜 대박 재미나다"},
+                {id: "id-10", content: "진짜 대박 재미나다"},
+                {id: "id-11", content: "진짜 대박 재미나다"},
+                {id: "id-12", content: "진짜 대박 재미나다"},
+                {id: "id-13", content: "진짜 대박 재미나다"},
+                {id: "id-14", content: "진짜 대박 재미나다"},
+                {id: "id-15", content: "진짜 대박 재미나다"},
+                {id: "id-16", content: "진짜 대박 재미나다"},
+                {id: "id-17", content: "진짜 대박 재미나다"},
+                {id: "id-18", content: "진짜 대박 재미나다"},
+                {id: "id-19", content: "진짜 대박 재미나다"},
+                {id: "id-20", content: "진짜 대박 재미나다"},
+                {id: "id-21", content: "진짜 대박 재미나다"},
+                {id: "id-22", content: "진짜 대박 재미나다"},
+            ],
+            lengthOfPage.value = (reviews.value.length / 5) + 1
         })
         return {
             id,
             tags,
             animeInfo,
-            infoView
+            infoView,
+            reviews,
+            page,
+            lengthOfPage
         }
     },
 })
