@@ -5,7 +5,7 @@
         <v-card>
             <v-row>
                 <v-col
-                v-for="n in list.filter(l => (l.idx < page * 18) & (l.idx >= (page-1) * 18))"
+                v-for="n in list.filter(l => (l.idx < page * totalCount) & (l.idx >= (page-1) * totalCount))"
                 :key="n"
                 cols="12" 
                 md="2">
@@ -39,10 +39,11 @@ export default defineComponent({
         const list = ref([])
         const page = ref(1)
         const lengthOfPage = ref(0)
+        const totalCount = 18
 
         onMounted(async () => {
             list.value = await getAnimes()
-            lengthOfPage.value = (list.value.length / 18) + 1
+            lengthOfPage.value = (list.value.length / totalCount) + 1
         })
 
         const clickAnime = (id) => {
@@ -52,7 +53,8 @@ export default defineComponent({
         return {
             list, page, 
             lengthOfPage,
-            clickAnime
+            clickAnime,
+            totalCount
         }
     }
 })
