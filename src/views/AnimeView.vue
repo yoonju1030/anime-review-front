@@ -32,23 +32,38 @@
         </v-row>
         <br/>
         <v-dialog
-        v-model="dialog"
+        v-model="logoutDialog"
         width="auto"
         >
-        <v-card
-            max-width="400"
-            prepend-icon="mdi-update"
-            text="Your application will relaunch automatically after the update is complete."
-            title="Update in progress"
+            <v-card
+                max-width="400"
+                text="로그인이 필요합니다"
+            >
+                <template v-slot:actions>
+                <v-btn
+                    class="ms-auto"
+                    text="Login"
+                    @click="moveLogin"
+                ></v-btn>
+                </template>
+            </v-card>
+        </v-dialog>
+        <v-dialog
+        v-model="loginDialog"
+        width="auto"
         >
-            <template v-slot:actions>
-            <v-btn
-                class="ms-auto"
-                text="Ok"
-                @click="dialog = false"
-            ></v-btn>
-            </template>
-        </v-card>
+            <v-card
+                max-width="400"
+                text="댓글이 작성되었습니다."
+            >
+                <template v-slot:actions>
+                <v-btn
+                    class="ms-auto"
+                    text="Ok"
+                    @click="loginDialog = false"
+                ></v-btn>
+                </template>
+            </v-card>
         </v-dialog>
         <v-card variant="outlined">
             <div class="ma-2" align="center" justify="center"><h2>Review</h2></div>
@@ -66,7 +81,7 @@
                             <v-btn 
                             icon="mdi-plus" 
                             size="small"
-                            @click="dialog = true"></v-btn>
+                            @click="checkLoginStatus"></v-btn>
                         </v-col>
                     </v-row>
                     <v-row align="center" justify="center">
@@ -95,11 +110,14 @@
 </template>
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { postAnime } from "../api/anime"; 
+import { useStore } from "vuex";
 export default defineComponent({
     setup() {
         const route = useRoute()
+        const router = useRouter()
+        const store = useStore()
         const id = ref('te')
         const tags = ref([])
         const animeInfo = ref({})
@@ -107,7 +125,8 @@ export default defineComponent({
         const reviews = ref([])
         const page = ref(1)
         const lengthOfPage = ref(0)
-        const dialog = ref(false)
+        const loginDialog = ref(false)
+        const logoutDialog = ref(false)
         onMounted(async () => {
             id.value = route.path.split("/")[2]
             let result = await postAnime({"id": id.value})
@@ -147,6 +166,19 @@ export default defineComponent({
             ],
             lengthOfPage.value = (reviews.value.length / 5) + 1
         })
+
+        const checkLoginStatus= () => {
+            const userStatus = store.getters["userStore/getLoginStatus"]
+            if (userStatus === true) {
+                loginDialog.value = true
+            } else {
+                logoutDialog.value = true
+            }
+        }
+
+        const moveLogin = () => {
+            router.push('/login')
+        }
         return {
             id,
             tags,
@@ -155,7 +187,10 @@ export default defineComponent({
             reviews,
             page,
             lengthOfPage,
-            dialog
+            checkLoginStatus,
+            loginDialog,
+            logoutDialog,
+            moveLogin
         }
     },
 })

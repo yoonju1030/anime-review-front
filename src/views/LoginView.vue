@@ -3,17 +3,18 @@
   class="bg-deep-purple" 
   height="100%"
   rounded>
+  <br/>
     <v-card class="mx-auto px-6 py-8" max-width="344">
       <v-form
         v-model="form"
         @submit.prevent="onSubmit"
       >
         <v-text-field
-          v-model="email"
+          v-model="id"
           :readonly="loading"
           :rules="[required]"
           class="mb-2"
-          label="Email"
+          label="Id"
           clearable
         ></v-text-field>
 
@@ -50,7 +51,7 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
     setup() {
         const form = ref(false)
-        const email = ref(null)
+        const id = ref(null)
         const password = ref(null)
         const loading = ref(false)
         const onSubmit = () => {
@@ -64,7 +65,7 @@ export default defineComponent({
 
         return {
             form,
-            email,
+            id,
             password, 
             loading,
             onSubmit,
