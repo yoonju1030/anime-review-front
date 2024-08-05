@@ -49,6 +49,7 @@
           type="submit"
           variant="elevated"
           block
+          @click="move"
         >
           Sign Up
         </v-btn>
@@ -57,9 +58,11 @@
 </template>
 <script>
 import { defineComponent, ref } from 'vue'
+import { useRouter } from "vue-router";
 
 export default defineComponent({
     setup() {
+        const router = useRouter()
         const form = ref(false)
         const id = ref(null)
         const password = ref(null)
@@ -72,6 +75,10 @@ export default defineComponent({
         const required = (v) => {
             return !!v || 'Field is required'
         }
+        
+        const move = () => {
+          router.push('/signup')
+        }
 
         return {
             form,
@@ -79,7 +86,8 @@ export default defineComponent({
             password, 
             loading,
             onSubmit,
-            required
+            required,
+            move
         }
     },
 })

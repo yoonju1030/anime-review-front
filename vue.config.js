@@ -9,7 +9,6 @@ module.exports = defineConfig({
   },
   devServer: {
     port: process.env.VUE_APP_PORT || 8080,
-    // proxy: 'http://35.209.2.128:8000',
     webSocketServer: false,
   },
 })
