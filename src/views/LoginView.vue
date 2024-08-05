@@ -42,6 +42,16 @@
           Sign In
         </v-btn>
       </v-form>
+      <br/>
+      <v-btn
+          color="grey-lighten-2"
+          size="large"
+          type="submit"
+          variant="elevated"
+          block
+        >
+          Sign Up
+        </v-btn>
     </v-card>
   </v-sheet>
 </template>
