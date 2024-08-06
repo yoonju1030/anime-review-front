@@ -59,6 +59,7 @@
   </template>
   <script>
   import { defineComponent, ref } from 'vue'
+  import { checkDuplicatedId } from "../api/users";
   
   export default defineComponent({
       setup() {
@@ -89,12 +90,14 @@
             }
           }
 
-          const checkIdValidation = (v) => {
+          const checkIdValidation = async (v) => {
             if (v.length < 8) {
                 return "id는 8자 이상 필요합니다."
             } else {
-                // id unique check logic
-                // not unique -> return "중복된 Id 입니다."
+                const unique = await checkDuplicatedId({id: v})
+                if (unique === false){
+                    return "중복된 Id 입니다."
+                }
             }
           }
   
