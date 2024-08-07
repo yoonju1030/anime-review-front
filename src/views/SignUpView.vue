@@ -48,18 +48,30 @@
             type="submit"
             variant="elevated"
             block
+            @click="signup"
           >
             Sign Up
           </v-btn>
         </v-form>
         <br/>
-
+        <v-overlay
+          :model-value="overlay"
+          class="align-center justify-center"
+          :persistent="true"
+        >
+          <v-progress-circular
+            color="primary"
+            size="64"
+            indeterminate
+          ></v-progress-circular>
+        </v-overlay>
       </v-card>
     </v-sheet>
   </template>
   <script>
   import { defineComponent, ref } from 'vue'
-  import { checkDuplicatedId } from "../api/users";
+  import { checkDuplicatedId, signUpUser } from "../api/users";
+  import commonObj from "../utils/common"
   
   export default defineComponent({
       setup() {
@@ -68,6 +80,7 @@
           const password = ref(null)
           const password2 = ref(null)
           const loading = ref(false)
+          const overlay = ref(false)
           const onSubmit = () => {
               if (!this.form) {return}
               this.loading = true
@@ -100,6 +113,20 @@
                 }
             }
           }
+
+          const signup = async () => {
+            overlay.value = !overlay.value
+            const encryptedPassword = await commonObj.encryptData(password.value)
+            const requestParams = {id: id.value, password: encryptedPassword}
+            const insertedId = await signUpUser(requestParams)
+            overlay.value = !overlay.value
+            if (insertedId === false) {
+              // 회원가입 실패 로직
+            } else {
+              // 회원가입 성공 로직
+            }
+                        
+          }
   
           return {
               form,
@@ -111,7 +138,9 @@
               required,
               checkSamePassword,
               checkIdValidation,
-              checkValidPassword
+              checkValidPassword,
+              overlay,
+              signup
           }
       },
   })

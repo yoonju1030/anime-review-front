@@ -1,4 +1,5 @@
 import axios from 'axios';
+import CryptoJS from "crypto-js";
 
 const axiosService = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -41,8 +42,26 @@ const axiosCall = async (method, url, params = {}, errorFunc=false) => {
     return returnValue
 }
 
+const encryptData = (data) => {
+    let key = process.env.VUE_APP_CRYPTOJS_KEY;
+    if (key.length < 16) {
+      key = key.padEnd(16, '0');
+    }
+  
+    let keyBytes = CryptoJS.enc.Utf8.parse(key);
+    const messageBytes = CryptoJS.enc.Utf8.parse(data);
+  
+    const encrypted = CryptoJS.AES.encrypt(messageBytes, keyBytes, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    })
+  
+    return encrypted.toString();
+  }
+
 const commonObj = {
-    axiosCall
+    axiosCall,
+    encryptData
 }
 
 export default commonObj;
