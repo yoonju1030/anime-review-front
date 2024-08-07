@@ -65,6 +65,17 @@
             indeterminate
           ></v-progress-circular>
         </v-overlay>
+        <v-alert
+          v-model="alert"
+          border="start"
+          close-label="Close Alert"
+          :color="alertColor"
+          :title="title"
+          variant="tonal"
+          closable
+        >
+          {{resultMessage}}
+        </v-alert>
       </v-card>
     </v-sheet>
   </template>
@@ -81,6 +92,10 @@
           const password2 = ref(null)
           const loading = ref(false)
           const overlay = ref(false)
+          const alert = ref(false)
+          const resultMessage = ref(null)
+          const title = ref(null)
+          const alertColor = ref(null)
           const onSubmit = () => {
               if (!this.form) {return}
               this.loading = true
@@ -120,11 +135,19 @@
             const requestParams = {id: id.value, password: encryptedPassword}
             const insertedId = await signUpUser(requestParams)
             overlay.value = !overlay.value
+            alert.value = true
+            password.value = null
+            password2.value = null
             if (insertedId === false) {
-              // 회원가입 실패 로직
+              title.value = "Fail"
+              alertColor.value = "orange-accent-4"
+              resultMessage.value = `${id.value} 회원가입 실패`
             } else {
-              // 회원가입 성공 로직
+              title.value = "Success"
+              alertColor.value = "deep-purple-accent-4"
+              resultMessage.value = `${id.value} 회원가입 완료`
             }
+            id.value = null
                         
           }
   
@@ -140,7 +163,11 @@
               checkIdValidation,
               checkValidPassword,
               overlay,
-              signup
+              signup,
+              alert,
+              resultMessage,
+              title,
+              alertColor
           }
       },
   })
