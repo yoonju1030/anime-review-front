@@ -56,6 +56,17 @@
         </v-btn>
     </v-card>
   </v-sheet>
+  <v-overlay
+    :model-value="overlay"
+    class="align-center justify-center"
+    :persistent="true"
+  >
+    <v-progress-circular
+      color="primary"
+      size="64"
+      indeterminate
+    ></v-progress-circular>
+  </v-overlay>
 </template>
 <script>
 import { defineComponent, ref } from 'vue'
@@ -71,6 +82,7 @@ export default defineComponent({
         const password = ref(null)
         const loading = ref(false)
         const store = useStore()
+        const overlay = ref(false)
         const onSubmit = () => {
             if (!this.form) {return}
             this.loading = true
@@ -85,11 +97,13 @@ export default defineComponent({
         }
 
         const logIn = async () => {
+          overlay.value = true
           const result = await logInUser({id: id.value, password: password.value})
           if (result.token) {
-            store.commit("userStore/setStatus", {login: true})
+            store.commit("userStore/setStatus", {login: true, id: id.value})
             store.commit("userStore/setToken", result.token)
-          } 
+          }
+          overlay.value = false
           router.go(0)
         } 
         return {

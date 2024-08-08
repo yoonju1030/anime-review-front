@@ -9,7 +9,7 @@ const axiosCall = async (method, url, params = {}, token = false, errorFunc=fals
     let axios = axiosService;
     let option = {}
     if (token !== false) {
-        option['headers'] = {Authorization: `Bearer ${token.access}`}
+        option['headers'] = {Authorization: `Bearer ${token.access_token}`}
     } else {
         option['withCredentials'] = true
     }

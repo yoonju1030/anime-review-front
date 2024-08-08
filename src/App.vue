@@ -42,7 +42,8 @@
           <v-list-item 
           prepend-icon="mdi-account-multiple" 
           title="Sign Out" 
-          value="signout" 
+          value="signout"
+          @click="signOut"
           v-else
           ></v-list-item>
         </v-list>
@@ -59,6 +60,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { logOutUser } from './api/users';
 
 export default defineComponent({
     setup() {
@@ -85,11 +87,19 @@ export default defineComponent({
           move(path)
         }
       }
+
+      const signOut = async () => {
+        const tokenInfo = store.getters['userStore/getToken']
+        await logOutUser({}, tokenInfo)
+        store.commit("userStore/setLogout")
+        router.go(0)
+      }
       return {
         move,
         userStatus,
         moveMyPage,
-        userId
+        userId,
+        signOut
       }
     },
 })

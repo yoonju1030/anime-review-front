@@ -15,8 +15,14 @@ async function logInUser(params) {
     const value = await common.axiosCall("POST", "/users/login", params);
     return value
 }
+
+async function logOutUser(params, token) {
+    const value = await common.axiosCall("POST", '/users/logout', params, token)
+    console.log(value)
+}
 export {
     checkDuplicatedId,
     signUpUser,
-    logInUser
+    logInUser,
+    logOutUser
 }

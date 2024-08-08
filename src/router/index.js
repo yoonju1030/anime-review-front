@@ -24,6 +24,9 @@ router.beforeEach(async (to, from, next) => {
             next()
         }
     } else {
+        if (to.path === "/mypage") {
+            next({path: "/"})
+        }
         next()
     }
 })
