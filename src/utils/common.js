@@ -5,9 +5,14 @@ const axiosService = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
 
-const axiosCall = async (method, url, params = {}, errorFunc=false) => {
+const axiosCall = async (method, url, params = {}, token = false, errorFunc=false) => {
     let axios = axiosService;
-    let option = { withCredentials: true };
+    let option = {}
+    if (token !== false) {
+        option['headers'] = {Authorization: `Bearer ${token.access}`}
+    } else {
+        option['withCredentials'] = true
+    }
     let returnValue = {}
     switch (method) {
         case "GET":
@@ -42,7 +47,7 @@ const axiosCall = async (method, url, params = {}, errorFunc=false) => {
     return returnValue
 }
 
-const encryptData = (data) => {
+const encryptData = async (data) => {
     let key = process.env.VUE_APP_CRYPTOJS_KEY;
     if (key.length < 16) {
       key = key.padEnd(16, '0');

@@ -11,7 +11,12 @@ async function signUpUser(params) {
     return value.result
 } 
 
+async function logInUser(params) {
+    const value = await common.axiosCall("POST", "/users/login", params);
+    return value
+}
 export {
     checkDuplicatedId,
-    signUpUser
+    signUpUser,
+    logInUser
 }

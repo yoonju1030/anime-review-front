@@ -132,7 +132,8 @@
           const signup = async () => {
             overlay.value = !overlay.value
             const encryptedPassword = await commonObj.encryptData(password.value)
-            const requestParams = {id: id.value, password: encryptedPassword}
+            console.log(encryptedPassword)
+            const requestParams = {id: id.value, password: password.value}
             const insertedId = await signUpUser(requestParams)
             overlay.value = !overlay.value
             alert.value = true
@@ -147,8 +148,7 @@
               alertColor.value = "deep-purple-accent-4"
               resultMessage.value = `${id.value} 회원가입 완료`
             }
-            id.value = null
-                        
+            id.value = null           
           }
   
           return {

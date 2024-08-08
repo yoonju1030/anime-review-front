@@ -38,6 +38,7 @@
           type="submit"
           variant="elevated"
           block
+          @click="logIn"
         >
           Sign In
         </v-btn>
@@ -59,6 +60,8 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useRouter } from "vue-router";
+import { logInUser } from '@/api/users';
+import { useStore } from "vuex";
 
 export default defineComponent({
     setup() {
@@ -67,6 +70,7 @@ export default defineComponent({
         const id = ref(null)
         const password = ref(null)
         const loading = ref(false)
+        const store = useStore()
         const onSubmit = () => {
             if (!this.form) {return}
             this.loading = true
@@ -80,6 +84,14 @@ export default defineComponent({
           router.push('/signup')
         }
 
+        const logIn = async () => {
+          const result = await logInUser({id: id.value, password: password.value})
+          if (result.token) {
+            store.commit("userStore/setStatus", {login: true})
+            store.commit("userStore/setToken", result.token)
+          } 
+          router.go(0)
+        } 
         return {
             form,
             id,
@@ -87,7 +99,8 @@ export default defineComponent({
             loading,
             onSubmit,
             required,
-            move
+            move,
+            logIn,
         }
     },
 })
