@@ -55,18 +55,18 @@
           Sign Up
         </v-btn>
     </v-card>
+    <v-overlay
+      :model-value="overlay"
+      class="align-center justify-center"
+      :persistent="true"
+    >
+      <v-progress-circular
+        color="primary"
+        size="64"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
   </v-sheet>
-  <v-overlay
-    :model-value="overlay"
-    class="align-center justify-center"
-    :persistent="true"
-  >
-    <v-progress-circular
-      color="primary"
-      size="64"
-      indeterminate
-    ></v-progress-circular>
-  </v-overlay>
 </template>
 <script>
 import { defineComponent, ref } from 'vue'
@@ -115,6 +115,7 @@ export default defineComponent({
             required,
             move,
             logIn,
+            overlay
         }
     },
 })
