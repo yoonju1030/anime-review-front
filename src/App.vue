@@ -53,6 +53,17 @@
         <router-view/>
       </v-main>
     </v-layout>
+    <v-overlay
+      :model-value="overlay"
+      class="align-center justify-center"
+      :persistent="true"
+    >
+      <v-progress-circular
+        color="primary"
+        size="64"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -68,6 +79,7 @@ export default defineComponent({
       const store = useStore()
       const userStatus = ref(false)
       const userId = ref("")
+      const overlay = ref(false)
       onMounted(() => {
         userStatus.value = store.getters["userStore/getLoginStatus"]
         if (userStatus.value === true) {
@@ -89,9 +101,11 @@ export default defineComponent({
       }
 
       const signOut = async () => {
+        overlay.value = !overlay.value
         const tokenInfo = store.getters['userStore/getToken']
         await logOutUser({}, tokenInfo)
         store.commit("userStore/setLogout")
+        overlay.value = !overlay.value
         router.go(0)
       }
       return {
@@ -99,7 +113,8 @@ export default defineComponent({
         userStatus,
         moveMyPage,
         userId,
-        signOut
+        signOut,
+        overlay
       }
     },
 })
