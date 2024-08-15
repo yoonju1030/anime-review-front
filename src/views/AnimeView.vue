@@ -60,7 +60,7 @@
                 <v-btn
                     class="ms-auto"
                     text="Ok"
-                    @click="loginDialog = false"
+                    @click="successComment"
                 ></v-btn>
                 </template>
             </v-card>
@@ -70,6 +70,7 @@
                     <v-row align="center" justify="center">
                         <v-col cols="10">
                             <v-textarea
+                            v-model="comment"
                             label="comment"
                             row-height="20"
                             rows="2"
@@ -107,11 +108,22 @@
                     </v-row>
         </v-card>
     </v-container>
+    <v-overlay
+      :model-value="overlay"
+      class="align-center justify-center"
+      :persistent="true"
+    >
+    <v-progress-circular
+        color="primary"
+        size="64"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
 </template>
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router";
-import { postAnime } from "../api/anime"; 
+import { postAnime, createCommentAPI } from "../api/anime"; 
 import { useStore } from "vuex";
 export default defineComponent({
     setup() {
@@ -127,6 +139,8 @@ export default defineComponent({
         const lengthOfPage = ref(0)
         const loginDialog = ref(false)
         const logoutDialog = ref(false)
+        const overlay = ref(false)
+        const comment = ref("")
         onMounted(async () => {
             id.value = route.path.split("/")[2]
             let result = await postAnime({"id": id.value})
@@ -167,9 +181,18 @@ export default defineComponent({
             lengthOfPage.value = (reviews.value.length / 5) + 1
         })
 
-        const checkLoginStatus= () => {
+        const createComment = async () => {
+            const tokenInfo = store.getters['userStore/getToken']
+            const userId = store.getters["userStore/getUserId"]
+            await createCommentAPI({animeId: id.value, userId: userId, content: comment.value}, tokenInfo)
+            overlay.value = false
+        }
+
+        const checkLoginStatus = async () => {
             const userStatus = store.getters["userStore/getLoginStatus"]
             if (userStatus === true) {
+                overlay.value = true
+                await createComment()
                 loginDialog.value = true
             } else {
                 logoutDialog.value = true
@@ -179,6 +202,12 @@ export default defineComponent({
         const moveLogin = () => {
             router.push('/login')
         }
+        
+        const successComment = () => {
+            loginDialog.value = false
+            router.go(0)
+        }
+
         return {
             id,
             tags,
@@ -190,7 +219,11 @@ export default defineComponent({
             checkLoginStatus,
             loginDialog,
             logoutDialog,
-            moveLogin
+            moveLogin,
+            createComment,
+            successComment,
+            overlay,
+            comment
         }
     },
 })
