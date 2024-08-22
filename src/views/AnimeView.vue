@@ -123,7 +123,7 @@
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from "vue-router";
-import { postAnime, createCommentAPI } from "../api/anime"; 
+import { postAnime, createCommentAPI, getComments } from "../api/anime"; 
 import { useStore } from "vuex";
 export default defineComponent({
     setup() {
@@ -144,6 +144,7 @@ export default defineComponent({
         onMounted(async () => {
             id.value = route.path.split("/")[2]
             let result = await postAnime({"id": id.value})
+            let reviewArray = await getComments({"animeId": id.value})
             console.log(result)
             animeInfo.value = result
             tags.value = animeInfo.value.tags
@@ -154,30 +155,7 @@ export default defineComponent({
                 }
             })
 
-            reviews.value = [
-                {id: "id-01", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-02", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-03", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-04", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-05", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-06", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-07", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-08", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-09", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-10", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-11", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-12", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-13", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-14", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-15", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-16", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-17", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-18", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-19", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-20", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-21", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-                {id: "id-22", content: "진짜 대박 재미나다", time: "yyyy-mm-dd hh:mm:ss"},
-            ],
+            reviews.value = reviewArray
             lengthOfPage.value = (reviews.value.length / 5) + 1
         })
 

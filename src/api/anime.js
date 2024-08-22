@@ -15,4 +15,14 @@ async function createCommentAPI(params, token) {
     console.log(value)
 }
 
-export {getAnimes, postAnime, createCommentAPI}
+async function getComments(params) {
+    const value = await common.axiosCall("POST", "/comments/get_comments", params)
+    return value.result
+}
+
+export {
+    getAnimes, 
+    postAnime, 
+    createCommentAPI,
+    getComments
+}
