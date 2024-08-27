@@ -20,9 +20,15 @@ async function getComments(params) {
     return value.result
 }
 
+async function getCommentsByUser(params) {
+    const value = await common.axiosCall("POST", "/comments/get_comment_by_users", params)
+    return value.result
+}
+
 export {
     getAnimes, 
     postAnime, 
     createCommentAPI,
-    getComments
+    getComments,
+    getCommentsByUser
 }
