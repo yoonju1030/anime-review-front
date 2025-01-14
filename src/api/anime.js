@@ -20,8 +20,8 @@ async function getComments(params) {
     return value.result
 }
 
-async function getCommentsByUser(params) {
-    const value = await common.axiosCall("POST", "/comments/get_comment_by_users", params)
+async function getCommentsByUser(params, token) {
+    const value = await common.axiosCall("POST", "/comments/get_comment_by_users", params, token)
     return value.result
 }
 

@@ -45,7 +45,8 @@ export default defineComponent({
         const page = ref(1)
         const lengthOfPage = ref(0)
         onMounted(async () => {
-            const result = await getCommentsByUser({"userId": id})
+            const tokenInfo = store.getters['userStore/getToken']
+            const result = await getCommentsByUser({"userId": id}, tokenInfo)
             reviews.value = result
             lengthOfPage.value = (reviews.value.length / (1+5)) + 1
         })
