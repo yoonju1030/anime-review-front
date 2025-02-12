@@ -1,5 +1,6 @@
 import axios from 'axios';
 import CryptoJS from "crypto-js";
+import store from "../store";
 
 const axiosService = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -25,6 +26,10 @@ const axiosCall = async (method, url, params = {}, token = false, errorFunc=fals
                 if (errorFunc) {
                     errorFunc(err)
                 } else {
+                    if (err.response && err.response.status == 401) {
+                        store.commit("userStore/setLogout")
+                        window.location.href = '/'
+                    }
                     return err
                 }
             })
@@ -40,6 +45,10 @@ const axiosCall = async (method, url, params = {}, token = false, errorFunc=fals
                 if (errorFunc) {
                     errorFunc(err)
                 } else {
+                    if (err.response && err.response.status == 401) {
+                        store.commit("userStore/setLogout")
+                        window.location.href = '/'
+                    }
                     return err
                 }
             })
